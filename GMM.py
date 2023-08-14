@@ -50,13 +50,27 @@ W_hat = np.eye(7)
 
 gmm_args = (sup_OU, W_hat)
 results = opt.minimize(criterion, params_init, args=(gmm_args),
-                       method='L-BFGS-B', bounds=((1e-10, None), (1e-10, None),(1e-10, None),(1e-10, None)))
+                       method='L-BFGS-B', bounds=((-5, None), (-5, None),(-5, None),(-5, None)))
 mu_GMM1, sig_GMM1,B_GMM1,a_n_GMM1 = results.x
 print('mu_GMM1=', mu_GMM1, ' sig_GMM1=', sig_GMM1,' B_GMM1=', B_GMM1,' a_n_GMM1=', a_n_GMM1)
 mean_data, var_data,autocovariance_data = data_moments(sup_OU)
 mean_model, var_model,autocovariance_model = model_moments(mu_init, sig_init,B_init,a_n_init)
-err1 = err_vec(sup_OU, mu_GMM1, sig_GMM1,B_GMM1,a_n_GMM1)
+err1 = err_vec(sup_OU, mu_init, sig_init,B_init,a_n_init)
 print('Mean of points =', mean_data, ', Variance of points =', var_data,', Autocovariance of points =', autocovariance_data)
 print('Mean of model =', mean_model, ', Variance of model =', var_model,', Autocovariance of model =', autocovariance_model)
 print('Error vector=', err1)
 results
+params_GMM1 = np.array([mu_GMM1, sig_GMM1,B_GMM1,a_n_GMM1])
+resultsfinal = opt.minimize(criterion, params_GMM1, args=(gmm_args),
+                       method='L-BFGS-B', bounds=((-5, None), (-5, None),(-5, None),(-5, None)))
+mu_GMM2, sig_GMM2,B_GMM2,a_n_GMM2 = resultsfinal.x
+resultsfinal
+print('mu_GMM2=', mu_GMM2, ' sig_GMM2=', sig_GMM2,' B_GMM2=', B_GMM2,' a_n_GMM2=', a_n_GMM2)
+mean_data, var_data,autocovariance_data = data_moments(sup_OU)
+mean_model2, var_model2,autocovariance_model2 = model_moments(mu_GMM1, sig_GMM1,B_GMM1,a_n_GMM1)
+err2 = err_vec(sup_OU, mu_GMM1, sig_GMM1,B_GMM1,a_n_GMM1)
+print('Mean of points =', mean_data, ', Variance of points =', var_data,', Autocovariance of points =', autocovariance_data)
+print('Mean of model =', mean_model2, ', Variance of model =', var_model2,', Autocovariance of model =', autocovariance_model2)
+print('Error vector=', err2)
+
+
