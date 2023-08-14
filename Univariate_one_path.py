@@ -30,7 +30,7 @@ def get_gamma(s: int, random_state: Optional[int] = None) -> np.ndarray:
     return np.random.gamma(a, b, s)
 
 
-U = get_gamma(s=20000, random_state=42)  # Ui for positive index
+U = get_gamma(s=20000, random_state=42) # Ui for positive index
 Un = get_gamma(s=20000, random_state=43)  # Ui for negative index
 
 
@@ -314,7 +314,7 @@ def autocorr2(x,lags):
 
     return np.array(corr)
 
-lags = np.arange(0, len(sup_OU)-1)
+lags = np.arange(0, 100)
 
 autocorr=autocorr2(sup_OU,lags)
 #autocorr = np.correlate(sup_OU, sup_OU, mode='full')

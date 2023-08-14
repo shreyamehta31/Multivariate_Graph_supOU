@@ -142,7 +142,7 @@ t_values = np.arange(110)
 
 
 def process_supOU(t_values, Us, As, Ts, taus, Uns, Ans, Tns, tauns, i) -> np.ndarray:
-    sup_OU = np.zeros_like(t_values)  # Initialize array to store function outputs
+    sup_OU = np.zeros_like(t_values,dtype=float)   # Initialize array to store function outputs
 
     for m, t in enumerate(t_values):
         sup_OU[m] = get_supOU(t, i, Us, As, Ts, taus, Uns, Ans, Tns, tauns)

@@ -1,7 +1,6 @@
-
 import numpy as np
-import statsmodels.api as sm
 from scipy.stats import moment
+from statsmodels.sandbox.regression import gmm
 
 # Define your moment conditions
 def moment_conditions(params, data):
@@ -13,7 +12,7 @@ def moment_conditions(params, data):
     y = data[:, 1]
 
     # Calculate moment conditions
-    moments = np.zeros(2)
+    moments = np.zeros((2,))
     moments[0] = moment(y - alpha - beta * x)
     moments[1] = moment((y - alpha - beta * x) * x)
 
@@ -25,7 +24,7 @@ def gmm_estimation(data):
     init_params = [0.5, 0.5]
 
     # Define the GMM model
-    gmm_model = sm.GMM(moment_conditions, init_params, data)
+    gmm_model = gmm.GMM(lambda params, data: moment_conditions(params, data), init_params, data)
 
     # Perform the first GMM estimation with the identity weighting matrix
     gmm_results = gmm_model.fit(maxiter=1)
