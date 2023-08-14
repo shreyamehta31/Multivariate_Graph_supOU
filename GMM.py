@@ -38,7 +38,7 @@ def criterion(params, *args):
     mu, sigma,B,an = params
     xvals, W = args
     err = err_vec(xvals, mu, sigma, B,an)
-    crit_val = np.dot(np.dot(err.T, W), err)
+    crit_val = (1/1000)*np.dot(np.dot(err.T, W), err)#1000 is the number of observations
 
     return crit_val
 mu_init = 1.5
