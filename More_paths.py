@@ -18,9 +18,12 @@ var= (nu)*((a*(a+1)/(1/b)**2))   #variance of Levy
 mean_theoretical=-mu/(B*(an-1))
 vardem=2*B*(an-1)
 variance_theoretical=-(var/vardem)
+autocovdem=2*B*(an-1)
+#autocovariance_theoretical=-var*(1-B*lags)**(1-an)/autocovdem
 
 num_paths = 3
-
+t_values = np.arange(1000)
+sup_OU_paths = np.zeros((num_paths, len(t_values)), dtype=float)
 for i in range(num_paths):
 
 #Function for generating Ui rv
@@ -100,8 +103,8 @@ for i in range(num_paths):
 
 
 # Generate array of function outputs for t values 0, 1, ..., 99
-    t_values = np.arange(1000)
-    sup_OU_paths = np.zeros((num_paths, len(t_values)), dtype=float)
+
+
     sup_OU_path = np.zeros_like(t_values, dtype=float) # Initialize array to store function outputs
     for k, t in enumerate(t_values):
         sup_OU_path[k] = get_supOU(t, tau)
@@ -109,83 +112,34 @@ for i in range(num_paths):
 
 
 # Print or use the output array as needed
-    print("Path",i,":",sup_OU_paths[i])
+    print("Path",i+1,":",sup_OU_paths[i])
+    print("mean",i+1,"=",np.mean(sup_OU_paths[i]))
+    print("variance",i+1,"=",np.var(sup_OU_paths[i]))
+
+
+    def autocorr2(x, lags):
+        mean = np.mean(x)
+        var = np.var(x)
+        xp = x - mean
+        corr = [1. if l == 0 else np.sum(xp[l:] * xp[:-l]) / len(x) / var for l in lags]
+        return np.array(corr)
+
+    lags = np.arange(0, 100)
+    autocorr_i = np.zeros_like(lags, dtype=float)
+    autocorr_i = autocorr2(sup_OU_paths[i], lags)
     import matplotlib.pyplot as plt
-#fig = plt.figure(figsize=(15, 7))
-#title = "Univariate supOUs "
+    plt.title('Multiple Runs of sup_OU')
     plt.plot(t_values,sup_OU_paths[i])
+    plt.legend(['Path {}'.format(i + 1) for i in range(num_paths)])
 plt.show()
 
-#title += r"$\alpha=0.07$, $\gamma = 0$, $\beta = 0.001$"
-'''for i in range(num_paths):
-    plt.plot(t_values,sup_OU_paths[i,:])
-plt.xlabel('t')
-plt.ylabel('sup_OU')
-plt.title('Multiple Runs of sup_OU')
-plt.legend(['Path {}'.format(i + 1) for i in range(num_paths)])
-plt.show()
-'''
-
-'''
-mean=np.mean(sup_OU)
-variance=np.var(sup_OU)
-
-
-#Estimating least squares
-
-meanLS=(mean_theoretical-mean)**2
-varianceLS=(variance_theoretical-variance)**2
-
-# Calculate autocorrelation function
-
-
-def autocorr2(x,lags):
-    
-
-    mean=np.mean(x)
-    var=np.var(x)
-    xp=x-mean
-    corr=[1. if l==0 else np.sum(xp[l:]*xp[:-l])/len(x)/var for l in lags]
-
-    return np.array(corr)
-
-lags = np.arange(0, 100)
-
-autocorr=autocorr2(sup_OU,lags)
-#autocorr = np.correlate(sup_OU, sup_OU, mode='full')
-
-# Extract autocorrelation values for positive lags
-#autocorr_positive = autocorr[len(sup_OU)-1:]
-cov=np.cov(sup_OU,sup_OU, bias=True)
-autocovdem=2*B*(an-1)
-autocovariance_theoretical=-var*(1-B*lags)**(1-an)/autocovdem'''
-
-'''
- # plot
-import matplotlib.pyplot as plt
-fig = plt.figure(figsize=(15, 7))
-title = "Univariate supOU "
-#title += r"$\alpha=0.07$, $\gamma = 0$, $\beta = 0.001$"
-plt.plot(t_values,sup_OU)
-plt.gca().set_title(title, fontsize=15)
-plt.xticks(fontsize=15)
-plt.yticks(fontsize=15)
-plt.show() '''
-
-'''h=np.arange(100)
-plt.plot(h,(1-B*h)**(1-an))
-plt.xlabel('Lag')
-plt.ylabel('Theoretical Autocorrelation')
-plt.title('Theoretical Autocorrelation Function')
-plt.show()'''
-# Create lag values for x-axis
-
-'''
 # Plot autocorrelation function
-plt.stem(lags, autocorr, use_line_collection=True)
-plt.plot(lags,(1-B*lags)**(1-an), color='black',label='Theoretical Autocorrelation Function')
+for i in range(num_paths):
+    plt.stem(lags, autocorr_i, use_line_collection=True)
+    plt.plot(lags,(1-B*lags)**(1-an), color='black',label='Theoretical Autocorrelation Function')
+    plt.xlabel('Lag')
+    plt.ylabel('Autocorrelation')
+    plt.title('Autocorrelation Function Path {}'.format(i + 1))
+    plt.show(block=True)
 
-plt.xlabel('Lag')
-plt.ylabel('Autocorrelation')
-plt.title('Autocorrelation Function')
-plt.show(block=True) '''
+
