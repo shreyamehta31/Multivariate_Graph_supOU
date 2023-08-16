@@ -3,10 +3,16 @@ import numpy.linalg as lin
 import scipy.stats as sts
 #import scipy.integrate as intgr
 import scipy.optimize as opt
-
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
 
 from More_paths import sup_OU_paths
+
 num_paths = 3
+mu_estimated=np.zeros(num_paths,dtype=float)
+sig_estimated=np.zeros(num_paths,dtype=float)
+B_estimated=np.zeros(num_paths,dtype=float)
+a_n_estimated=np.zeros(num_paths,dtype=float)
 
 for i in range(num_paths):
     def data_moments(xvals):
@@ -73,5 +79,21 @@ for i in range(num_paths):
     print('Mean of points',i+1,'=', mean_data, ', Variance of points ',i+1,'=', var_data,', Autocovariance of points ',i+1,'=', autocovariance_data)
     print('Mean of model ',i+1,'=', mean_model2, ', Variance of model',i+1,'=', var_model2,', Autocovariance of model ',i+1,'=', autocovariance_model2)
     print('Error vector=', err2)
+    mu_estimated[i] = mu_GMM2
+    sig_estimated[i] = sig_GMM2
+    B_estimated[i] = B_GMM2
+    a_n_estimated[i] = a_n_GMM2
 
+print('Estimations of mu:',mu_estimated)
+print('Estimations of sig:',sig_estimated)
+print('Estimations of B:',B_estimated)
+print('Estimations of a_n:',a_n_estimated)
+
+print('Mean of estimations of mu:',np.mean(mu_estimated))
+print('Mean of estimations of sig:',np.mean(sig_estimated))
+print('Mean of estimations of B:',np.mean(B_estimated))
+print('Mean of estimations of a_n:',np.mean(a_n_estimated))
+sm.qqplot(mu_estimated, line='45')
+plt.title("QQ Plot mu")
+plt.show()
 
