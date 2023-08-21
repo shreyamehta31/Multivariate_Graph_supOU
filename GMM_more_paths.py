@@ -6,9 +6,11 @@ import scipy.optimize as opt
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 
-from More_paths import sup_OU_paths
+sup_OU=np.load('sup_OU(nu=10,a=3,b=0.05,B= -0.1,an=1.95).npz')
+sup_OU_paths=sup_OU['sup_OU_paths']
 
-num_paths = 3
+
+num_paths = 5
 mu_estimated=np.zeros(num_paths,dtype=float)
 sig_estimated=np.zeros(num_paths,dtype=float)
 B_estimated=np.zeros(num_paths,dtype=float)
@@ -93,7 +95,28 @@ print('Mean of estimations of mu:',np.mean(mu_estimated))
 print('Mean of estimations of sig:',np.mean(sig_estimated))
 print('Mean of estimations of B:',np.mean(B_estimated))
 print('Mean of estimations of a_n:',np.mean(a_n_estimated))
+
+plt.hist(mu_estimated, bins=20, color='blue', alpha=0.7)
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Histogram of mu_estimated')
+plt.show()
+plt.hist(sig_estimated, bins=20, color='blue', alpha=0.7)
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Histogram of sig_estimated')
+plt.show()
+plt.hist(B_estimated, bins=20, color='blue', alpha=0.7)
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Histogram of B_estimated')
+plt.show()
+plt.hist(a_n_estimated, bins=20, color='blue', alpha=0.7)
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Histogram of a_n_estimated')
+plt.show()
+
 sm.qqplot(mu_estimated, line='45')
 plt.title("QQ Plot mu")
 plt.show()
-
