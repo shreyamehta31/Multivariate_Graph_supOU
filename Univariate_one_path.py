@@ -9,7 +9,6 @@ from typing import Optional
 import numpy as np
 from scipy.stats import gamma
 
-
 nu=10 #rate
 a=3     #shape for U
 b=0.05     #scale for U
@@ -19,18 +18,14 @@ mu=(nu)*(a/(1/b)) #mean of Levy
 var= (nu)*((a*(a+1)/(1/b)**2))   #variance of Levy
 #var1=nu*(a*(1+a)/(1/b)**2)
 
-
 mean_theoretical=-mu/(B*(an-1))
 vardem=2*B*(an-1)
 variance_theoretical=-(var/vardem)
-
-
 
 #Function for generating Ui rv
 def get_gamma(s: int, random_state: Optional[int] = None) -> np.ndarray:
     np.random.seed(random_state)
     return np.random.gamma(a, b, s)
-
 
 U = get_gamma(s=20000,random_state=42) #Ui for positive index
 Un=get_gamma(s=20000,random_state=43) #Ui for negative index
@@ -136,7 +131,19 @@ def autocorr2(x,lags):
     corr=[1. if l==0 else np.sum(xp[l:]*xp[:-l])/len(x)/var for l in lags]
 
     return np.array(corr)
+def autocorr2(x,lags):
+    '''manualy compute, non partial'''
 
+    mean=np.mean(x)
+    var=np.var(x)
+    xp=x-mean
+    corr=[1. if l==0 else np.sum(xp[l:]*xp[:-l])/len(x)/var for l in lags]
+
+    return np.array(corr)
+
+lags = np.arange(0, 100)
+
+autocorr=autocorr2(sup_OU,lags)
 lags = np.arange(0, 100)
 
 autocorr=autocorr2(sup_OU,lags)
