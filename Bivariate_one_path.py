@@ -3,6 +3,7 @@ from typing import Optional
 import numpy as np
 from scipy.stats import gamma
 import math
+from numpy.random import poisson, gamma, uniform
 
 
 nu=10 #rate
@@ -96,8 +97,54 @@ taun2=get_tau(Tn2)#tau_i for negative index for 2 Poisson
 tauj=get_tau(Tj)#tau_i for positive index for || Poisson
 taunj=get_tau(Tnj)#tau_i for negative index for || Poisson
 
+
+compound_levy = []
+for i in range(len(tau1)):
+    if i == 0:
+        compound_levy.append(np.sum(U1[:int(tau1[i])]))
+    else:
+        compound_levy.append(np.sum(U1[int(tau1[i-1]):int(tau1[i])]))
+       # print(U1[int(tau1[i-1]):int(tau1[i])])
+compound_levy = np.array(compound_levy)
+
+
+# Calculate empirical mean and variance of the compound Levy process
+empirical_mean_levy = np.mean(compound_levy)
+empirical_variance_levy = np.var(compound_levy)
+
+print("Empirical Mean of Compound Levy Process:", empirical_mean_levy)
+print("Empirical Variance of Compound Levy Process:", empirical_variance_levy)
+'''
+def get_L(k:int):
+   Sum=0
+   for i in range(0,k):
+       Sum=Sum+U1[i]
+   return(
+       Sum
+        )
+def get_CP(Z:int,tau1:np.ndarray) -> np.ndarray:
+   # t= np.arange(Z, dtype=np.float128)
+   index1=0;
+   for l in tau1:
+       if l<=Z:
+           index1=index1+1
+   k1=index1;
+
+   CP=get_L(k1)
+
+   return(
+     CP
+        )
+l=[]
+
+for Z in range(1000):
+    l.append(get_CP(Z,tau1))
+print(l)
+print(np.mean(l))
+print(np.var(l))'''
+
 # Generate array of function outputs for t values 0, 1, ..., 99
-tv=300
+tv=1000
 t_values = np.arange(tv)
 supOUb = np.zeros((tv, 2, 1))
 
@@ -224,7 +271,7 @@ for t in t_values:
         x_component_values.append(x_component)
         y_component_values.append(y_component)
 
-    # Select data for time range t=10 to t=200
+    # Select data for time range t=25 to t=1000
     start_time = 25
     end_time = 1000
     selected_t_values = t_values[start_time:end_time]
