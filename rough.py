@@ -1,31 +1,17 @@
 import numpy as np
+from scipy.linalg import expm
+from scipy.integrate import quad
 
-# Parameters
-rate = 10
-alpha = 3
-beta = 20
-time = 1000  # Time horizon
+A = np.array([[-1, -0.5], [-0.5, -1]])
+W = np.array([[0.6, 0.225], [0.225, 0.6]])
 
-# Simulate arrival times from an exponential distribution
-arrival_times = np.random.exponential(scale=1 / rate, size=time)
+def integrand(t):
+    eAt = expm(A * t)
+    eATt = expm(A.T * t)
+    result = np.dot(np.dot(eAt, W), eATt)
+    return result.flatten()
 
-# Simulate jump sizes from a Gamma distribution
-num_jumps = np.random.poisson(rate * time)  # Number of jumps in the given time
-jump_sizes = np.random.gamma(shape=alpha, scale=beta, size=num_jumps)
+# Integrate the function from 0 to infinity
+result, _ = quad(integrand, 0, np.inf)
 
-# Generate the compound Poisson process
-compound_poisson = np.zeros(time)
-arrival_sum = 0
-for i, jump_time in enumerate(arrival_times):
-    if arrival_sum >= time:
-        break
-    arrival_sum += jump_time
-    jumps_until_time = np.sum(jump_sizes[np.cumsum(arrival_times) <= arrival_sum])
-    compound_poisson[min(int(arrival_sum), time - 1)] = jumps_until_time
-
-# Calculate mean and variance of the simulated compound Poisson process
-mean_poisson = np.mean(compound_poisson)
-variance_poisson = np.var(compound_poisson)
-
-print("Mean of Compound Poisson Process:", mean_poisson)
-print("Variance of Compound Poisson Process:", variance_poisson)
+print(result)

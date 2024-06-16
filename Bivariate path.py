@@ -7,8 +7,7 @@ from numpy.random import poisson, gamma, uniform
 import scipy
 from scipy import linalg
 #from scipy.linalg import solve_sylvester
-import time
-time_taken = time.time()
+
 
 nu=10 #rate
 a=3     #shape for U
@@ -257,6 +256,7 @@ for t in t_values:
 
 import matplotlib.pyplot as plt
 
+# ... (rest of your code)
 
 # Iterate through each time value in t_values
 for t in t_values:
@@ -312,8 +312,8 @@ autocorry = autocorr2(selected_y_components, lags)
 #theoretical
 D1_values = []
 D2_values = []
-b=np.array( [[ 0.3419,-0.0526 ],
-      [ -0.0526,0.3419]] )
+b=np.array( [[ 0.6312,0.2367 ],
+      [ 0.2367,0.6312]] )
 lags = np.arange(0, 100)
 
 for h in lags:
@@ -356,7 +356,3 @@ plt.xlabel('Lag')
 plt.ylabel('Autocorrelation of y component')
 plt.title('Autocorrelation Function of Y component')
 plt.show(block=True)
-
-np.savez('Bivariatesup_OU(nu=10,a=3,b=0.05,B=-0.1,an=1.95).npz', selected_x_components=selected_x_components, selected_y_components=selected_y_components)
-
-print("My program took", time.time() - time_taken, "to run")
