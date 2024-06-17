@@ -3,6 +3,7 @@ from scipy.stats import gamma
 from numpy.random import poisson, gamma, uniform
 from typing import Optional
 
+
 import time
 
 time_taken = time.time()
@@ -209,9 +210,13 @@ for i in range(num_paths):
         supOUb[t] = supOUbv
     sup_OUb_paths[i, :] = supOUb
 
+start_time = 25
+end_time = 1000
 # Extract x and y components for all vectors at all time steps
 x_component_values = [[] for _ in range(num_paths)]
 y_component_values = [[] for _ in range(num_paths)]
+selected_x_components = np.empty(num_paths, dtype=object)
+selected_y_components =np.empty(num_paths, dtype=object)
 meanx = np.zeros(num_paths)
 meany = np.zeros(num_paths)
 variancex = [np.zeros((2, 2)) for _ in range(num_paths)]
@@ -227,25 +232,28 @@ for i in range(num_paths):
         y_component_values[i].append(y_component)
 
     # Select data for time range t=25 to t=1000
-    start_time = 25
-    end_time = 1000
-    selected_t_values = t_values[start_time:end_time]
-    selected_x_components = np.array(x_component_values[i][start_time:end_time])
-    selected_y_components = np.array(y_component_values[i][start_time:end_time])
 
-    meanx[i] = np.mean(selected_x_components)
-    meany[i] = np.mean(selected_y_components)
-    variancex[i] = np.var(selected_x_components)
-    variancey[i] = np.var(selected_y_components)
+    selected_t_values = t_values[start_time:end_time]
+    selected_x_components[i] = np.array(x_component_values[i][start_time:end_time])
+    selected_y_components[i] = np.array(y_component_values[i][start_time:end_time])
+
+    meanx[i] = np.mean(selected_x_components[i])
+    meany[i] = np.mean(selected_y_components[i])
+    variancex[i] = np.var(selected_x_components[i])
+    variancey[i] = np.var(selected_y_components[i])
+
+
 
     print("Mean of x component of ", i, "th path:", meanx[i])
     print("Mean of y component of ", i, "th path:", meany[i])
     print("Variance of x component of ", i, "th path:", variancex[i])
     print("Variance  of y component of ", i, "th path:", variancey[i])
 
+print("real selected_x_components",selected_x_components)
+print("real selected_y_components",selected_y_components)
+
 #  import matplotlib.pyplot as plt
 
-# Uncomment the following sections to add more functionality like plotting and saving results
 '''  def autocorr2(x, lags):
         mean = np.mean(x)
         var = np.var(x)
@@ -309,5 +317,8 @@ for i in range(num_paths):
 '''
 np.savez('Bivariatesup_OU_more(nu=10,a=3,b=0.05,B=-0.1,an=1.95).npz', selected_x_components=selected_x_components,
          selected_y_components=selected_y_components)
+
+
+
 
 print("My program took", time.time() - time_taken, "to run")

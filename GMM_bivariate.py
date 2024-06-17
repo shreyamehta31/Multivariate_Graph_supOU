@@ -48,6 +48,8 @@ def data_moments(xvals, yvals):
 #print(data_moments(selected_x_components, selected_y_components))
 
 mean_data, var_data, autocov_data = data_moments(selected_x_components, selected_y_components)
+print("var_data",var_data)
+
 
 vech_am=[vech(A) for A in autocov_data ]
 
@@ -104,6 +106,7 @@ W_hat = np.eye(20)
 #print("Model moments:", model_moments(mu_init,sigma_init, an_init))
 
 mean_model, var_model, autocov_model =  model_moments(mu_init,sigma_init, an_init)
+print("var_model",var_model)
 
 vech_amm=[vech(A) for A in autocov_model ]
 
