@@ -6,7 +6,7 @@ import scipy.optimize as opt
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 
-sup_OU=np.load('sup_OU(nu=10,a=3,b=0.05,B= -0.1,an=1.95).npz')
+sup_OU=np.load('sup_OU200(nu=10,a=3,b=0.05,B= -0.1,an=1.95).npz')
 sup_OU_paths=sup_OU['sup_OU_paths']
 
 
@@ -97,26 +97,41 @@ print('Mean of estimations of B:',np.mean(B_estimated))
 print('Mean of estimations of a_n:',np.mean(a_n_estimated))
 
 plt.hist(mu_estimated, bins=20, color='blue', alpha=0.7)
+plt.axvline(x=1.5, color='red', linestyle='--', linewidth=2)
 plt.xlabel('Value')
 plt.ylabel('Frequency')
 plt.title('Estimation of parameter "\u03bc"')
 plt.show()
 plt.hist(sig_estimated, bins=20, color='blue', alpha=0.7)
+plt.axvline(x=0.3, color='red', linestyle='--', linewidth=2)
 plt.xlabel('Value')
 plt.ylabel('Frequency')
 plt.title('Estimation of parameter "\u03C3"')
 plt.show()
 plt.hist(B_estimated, bins=20, color='blue', alpha=0.7)
+plt.axvline(x=-0.1, color='red', linestyle='--', linewidth=2)
 plt.xlabel('Value')
 plt.ylabel('Frequency')
 plt.title('Estimation of parameter B')
 plt.show()
 plt.hist(a_n_estimated, bins=20, color='blue', alpha=0.7)
+plt.axvline(x=1.95, color='red', linestyle='--', linewidth=2)
 plt.xlabel('Value')
 plt.ylabel('Frequency')
 plt.title('Estimation of parameter a_n')
 plt.show()
 
-sm.qqplot(mu_estimated, line='45')
-plt.title("QQ Plot mu")
+sm.qqplot(mu_estimated, line="r", marker='o', markersize=5, markerfacecolor='none', markeredgewidth=1)
+plt.title('Normal QQ Plot for "\u03bc"')
 plt.show()
+
+sm.qqplot(sig_estimated, line="r", marker='o', markersize=5, markerfacecolor='none', markeredgewidth=1)
+plt.title('Normal QQ Plot for "\u03C3"')
+plt.show()
+sm.qqplot(B_estimated, line="r", marker='o', markersize=5, markerfacecolor='none', markeredgewidth=1)
+plt.title('Normal QQ Plot for B')
+plt.show()
+sm.qqplot(a_n_estimated, line="r", marker='o', markersize=5, markerfacecolor='none', markeredgewidth=1)
+plt.title('Normal QQ Plot for a_n')
+plt.show()
+

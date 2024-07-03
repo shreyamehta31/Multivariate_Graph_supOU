@@ -21,7 +21,7 @@ variance_theoretical=-(var/vardem)
 autocovdem=2*B*(an-1)
 #autocovariance_theoretical=-var*(1-B*lags)**(1-an)/autocovdem
 
-num_paths = 100
+num_paths = 200
 t_values = np.arange(1000)
 sup_OU_paths = np.zeros((num_paths, len(t_values)), dtype=float)
 for i in range(num_paths):
@@ -134,13 +134,14 @@ for i in range(num_paths):
 plt.show()
 
 # Plot autocorrelation function
-for i in range(num_paths):
+'''for i in range(num_paths):
     plt.stem(lags, autocorr_i, use_line_collection=True)
     plt.plot(lags,(1-B*lags)**(1-an), color='black',label='Theoretical Autocorrelation Function')
     plt.xlabel('Lag')
     plt.ylabel('Autocorrelation')
     plt.title('Autocorrelation Function Path {}'.format(i + 1))
-    plt.show(block=True)
+    plt.show(block=True)'''
 
-np.savez('sup_OU(nu=10,a=3,b=0.05,B= -0.1,an=1.95).npz',sup_OU_paths=sup_OU_paths)
+np.savez('sup_OU200(nu=10,a=3,b=0.05,B= -0.1,an=1.95).npz',sup_OU_paths=sup_OU_paths)
 
+print("My program took", time.time() - time_taken, "to run")

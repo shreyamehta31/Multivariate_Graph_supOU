@@ -69,7 +69,7 @@ for i in range(num_paths):
         Adj = np.array([[0, 1],
                     [1, 0]])  # in K
         c=0.5
-        an=1.95
+   #     an=1.95
         cAdj = c * Adj
         I2 = np.identity(2)
         cAdj += I2
@@ -196,27 +196,56 @@ print('Mean of estimations of sig of x component:', np.mean(sig_estimated[:, 0, 
 print('Mean of estimations of sig of y component:', np.mean(sig_estimated[:, 1, 0]))
 print('Mean of estimations of a_n:', np.mean(a_n_estimated))
 
-plt.hist(mu_estimated[:, 0, 0], bins=20, color='blue', alpha=0.7)
-plt.hist(mu_estimated[:, 1, 0], bins=20, color='blue', alpha=0.7)
+plt.hist(mu_estimated[:, 0, 0], bins=35, color='blue', alpha=0.7)
+plt.axvline(x=3, color='red', linestyle='--', linewidth=2)
 plt.xlabel('Value')
 plt.ylabel('Frequency')
-plt.title('Estimation of parameter "\u03bc"')
+plt.title('Estimation of parameter "\u03bc" for first component')
 plt.show()
-
-plt.hist(sig_estimated[:, 0, 1], bins=20, color='blue', alpha=0.7)
-plt.hist(sig_estimated[:, 1, 0], bins=20, color='blue', alpha=0.7)
+plt.hist(mu_estimated[:, 1, 0], bins=35, color='blue', alpha=0.7)
+plt.axvline(x=3, color='red', linestyle='--', linewidth=2)
 plt.xlabel('Value')
 plt.ylabel('Frequency')
-plt.title('Estimation of parameter "\u03C3"')
+plt.title('Estimation of parameter "\u03bc" for second component')
 plt.show()
 
-plt.hist(a_n_estimated, bins=20, color='blue', alpha=0.7)
+plt.hist(sig_estimated[:, 0, 1], bins=35, color='blue', alpha=0.7)
+plt.axvline(x=0.225, color='red', linestyle='--', linewidth=2)
+plt.hist(sig_estimated[:, 1, 0], bins=35, color='blue', alpha=0.7)
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Estimation of parameter "\u03C3" for first component')
+plt.show()
+
+plt.axvline(x=0.225, color='red', linestyle='--', linewidth=2)
+plt.hist(sig_estimated[:, 1, 0], bins=35, color='blue', alpha=0.7)
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Estimation of parameter "\u03C3" for second component')
+plt.show()
+
+plt.hist(a_n_estimated, bins=35, color='blue', alpha=0.7)
+plt.axvline(x=1.95, color='red', linestyle='--', linewidth=2)
 plt.xlabel('Value')
 plt.ylabel('Frequency')
 plt.title('Estimation of parameter a_n')
 plt.show()
 
-sm.qqplot(mu_estimated[:, 0, 0], line='45')
-sm.qqplot(mu_estimated[:, 1, 0], line='45')
-plt.title("QQ Plot mu")
+sm.qqplot(mu_estimated[:, 0, 0], line="r", marker='o', markersize=5, markerfacecolor='none', markeredgewidth=1)
+plt.title('Normal QQ Plot for "\u03bc" for first component')
+plt.show()
+sm.qqplot(mu_estimated[:, 1, 0], line="r", marker='o', markersize=5, markerfacecolor='none', markeredgewidth=1)
+plt.title('Normal QQ Plot for "\u03bc" for second component')
+plt.show()
+
+sm.qqplot(sig_estimated[:, 0, 1], line="r", marker='o', markersize=5, markerfacecolor='none', markeredgewidth=1)
+plt.title('Normal QQ Plot for "\u03C3" for first component')
+plt.show()
+sm.qqplot(sig_estimated[:, 1, 0], line="r", marker='o', markersize=5, markerfacecolor='none', markeredgewidth=1)
+plt.title('Normal QQ Plot for "\u03C3" for second component')
+plt.show()
+
+
+sm.qqplot(a_n_estimated, line="r", marker='o', markersize=5, markerfacecolor='none', markeredgewidth=1)
+plt.title('Normal QQ Plot for a_n')
 plt.show()
