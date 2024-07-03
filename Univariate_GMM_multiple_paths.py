@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 sup_OU=np.load('sup_OU200(nu=10,a=3,b=0.05,B= -0.1,an=1.95).npz')
 sup_OU_paths=sup_OU['sup_OU_paths']
 
-
 num_paths = 100
 mu_estimated=np.zeros(num_paths,dtype=float)
 sig_estimated=np.zeros(num_paths,dtype=float)

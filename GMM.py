@@ -1,34 +1,4 @@
-'''
 
-
-def data_moments(xvals):
-    mean_data = xvals.mean()
-    var_data = xvals.var()
-    xp = xvals - mean_data
-    lags=[1,2,3,4,5]
-    cov = [np.sum(xp[l:] * xp[:-l]) / len(xp) for l in lags]
-    autocovariance_data=np.array(cov)
-    return mean_data, var_data,autocovariance_data
-
-
-def model_moments(mu, sigma,B,an):
-    mean_model=-mu/(B*(an-1))
-    var_model=-sigma/(2*B*(an-1))
-    autocovdem = 2 * B * (an - 1)
-    lags = [1, 2, 3, 4, 5]
-    autocov_model = [(-sigma * (1 - B * l) ** (1 - an)) / autocovdem for l in lags]
-    autocovariance_model=np.array(autocov_model)
-    return mean_model, var_model,autocovariance_model
-def err_vec(xvals, mu, sigma,B,an):
-    mean_data, var_data, autocovariance_data = data_moments(xvals)
-    moms_data = np.array([mean_data, var_data]+list(autocovariance_data))
-    mean_model, var_model,autocovariance_model = model_moments(mu, sigma, B,an)
-    moms_model = np.array([mean_model ,var_model]+list(autocovariance_model))
-    err_vec = (moms_model - moms_data)**2
-    return err_vec
-
-
-def criterion(params, *args):'''
 import numpy as np
 import numpy.linalg as lin
 import scipy.stats as sts
